@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Data Profiler | Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Data Profiler <span class="badge">PRO</span></h1>
+            <button id="theme-toggle" class="theme-btn">🌙 Dark Mode</button>
+        </header>
+
+        <div class="upload-section">
+            <p>Upload your CSV for instant AI-driven insights.</p>
+            <input type="file" id="csv-file" accept=".csv">
+        </div>
+        
+        <div id="results" class="hidden">
+            <div class="stats-grid">
+                <div class="card">
+                    <h4>Total Records</h4>
+                    <h2 id="stat-row-count">0</h2>
+                </div>
+                <div class="card">
+                    <h4>Avg Value</h4>
+                    <h2 id="stat-mean">0</h2>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="dataChart"></canvas>
+            </div>
+
+            <div class="footer-actions">
+                <a href="YOUR_STREAMLIT_LINK" class="btn-primary">Deep AI Analysis (Python Engine) →</a>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
