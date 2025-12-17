@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Data Profiler | Pro</title>
+    <title>Intelligent Data Profiler | ES6</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -11,12 +12,32 @@
 <body>
     <div class="container">
         <header>
-            <h1>📊 Data Profiler <span class="badge">PRO</span></h1>
+            <div class="logo-area">
+                <h1>📊 Data Profiler <span class="badge">PRO</span></h1>
+                <p class="subtitle">High-speed client-side exploratory analysis</p>
+            </div>
             <button id="theme-toggle" class="theme-btn">🌙 Dark Mode</button>
         </header>
 
+        <div id="welcome-screen" class="features-grid">
+            <div class="f-card">
+                <h3>⚡ Fast</h3>
+                <p>Client-side parsing with zero server latency.</p>
+            </div>
+            <div class="f-card">
+                <h3>🛡️ Private</h3>
+                <p>Your data never leaves your local machine.</p>
+            </div>
+            <div class="f-card">
+                <h3>📈 Visual</h3>
+                <p>Instant trend mapping for numerical columns.</p>
+            </div>
+        </div>
+
         <div class="upload-section">
-            <p>Upload your CSV for instant AI-driven insights.</p>
+            <div class="upload-icon">📁</div>
+            <h3>Upload Dataset</h3>
+            <p>Drag and drop your CSV file here or click to browse.</p>
             <input type="file" id="csv-file" accept=".csv">
         </div>
         
@@ -25,19 +46,30 @@
                 <div class="card">
                     <h4>Total Records</h4>
                     <h2 id="stat-row-count">0</h2>
+                    <p class="card-label">Identified entries</p>
                 </div>
                 <div class="card">
-                    <h4>Avg Value</h4>
+                    <h4>Calculated Mean</h4>
                     <h2 id="stat-mean">0</h2>
+                    <p class="card-label">Primary numeric feature</p>
                 </div>
             </div>
             
             <div class="chart-container">
+                <div class="chart-header">
+                    <h3>Data Trend Visualization</h3>
+                </div>
                 <canvas id="dataChart"></canvas>
             </div>
 
             <div class="footer-actions">
-                <a href="YOUR_STREAMLIT_LINK" class="btn-primary">Deep AI Analysis (Python Engine) →</a>
+                <div class="python-callout">
+                    <h4>Need deeper statistical insights?</h4>
+                    <p>Use the specialized Python engine for heatmaps and correlation matrices.</p>
+                    <a href="https://github.com/codewhisper555/Data-Profiler_Python" class="btn-primary">
+                        Launch Python Engine →
+                    </a>
+                </div>
             </div>
         </div>
     </div>
