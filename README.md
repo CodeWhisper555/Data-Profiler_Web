@@ -1,17 +1,21 @@
-# Quick Data Profiler 📊
+# 📊 Intelligent Data Profiler (Browser-Core)
 
-I built this because I got tired of opening heavy software just to check the basic stats of a CSV file. This is a lightweight, "zero-install" dashboard that handles the initial data check directly in your browser.
+This is the frontend component of a dual-tier data suite designed for **instant exploratory analysis**. While most tools require a slow server upload, this tool handles the heavy lifting directly in your browser.
 
-### Why use this?
-* **Privacy:** Your data never leaves your computer. All processing happens in the browser via JS.
-* **Speed:** No waiting for a Python kernel to start. Just drag, drop, and see the trends.
-* **Dark Mode:** Because no one likes staring at a white screen at 2 AM.
 
-### Under the hood
-* **Parsing:** Using `PapaParse` because it handles large CSVs without crashing the tab.
-* **Charts:** `Chart.js` for the visuals. It's set to show the first 30 rows by default to keep the UI snappy.
 
-### How to run it locally
-1. Clone the repo.
-2. Open `index.html` in Chrome or Firefox. 
-3. (Optional) If you want to see the advanced AI version, check my other repo: [Link to Python Repo]
+## 🛠 Why I built this
+Standard data profiling usually involves a lot of "wait time" while files upload to a server. I wanted to build a "speed-first" alternative that gives immediate visual feedback. 
+
+## ⚡ The "Compute-Split" Logic
+- **Browser Level:** Uses `PapaParse` and `Chart.js` for instant CSV processing. This keeps your data private (it never leaves your machine).
+- **Engine Level:** For deep statistics (like correlation heatmaps), I built a secondary Python engine to handle the complex math that JavaScript isn't optimized for.
+
+## 🚀 Key Features
+- **Zero-Latency:** Multi-threaded CSV parsing.
+- **Glassmorphism UI:** Modern, dark-mode ready interface.
+- **Privacy Centric:** Client-side processing ensures data stays local.
+
+## 🔗 Live Links
+- **Web Dashboard:** [Insert your GitHub Pages Link Here]
+- **Python Engine:** [Insert your Streamlit Link Here]
