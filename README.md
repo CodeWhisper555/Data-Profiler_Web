@@ -17,5 +17,5 @@ Standard data profiling usually involves a lot of "wait time" while files upload
 - **Privacy Centric:** Client-side processing ensures data stays local.
 
 ## 🔗 Live Links
-- **Web Dashboard:** [Insert your GitHub Pages Link Here]
-- **Python Engine:** [Insert your Streamlit Link Here]
+- **Web Dashboard:** https://codewhisper555.github.io/Data-Profiler_Web/
+- **Python Engine:** https://data-profilerpython-jzexmafhrvueyhbacwvifg.streamlit.app/
