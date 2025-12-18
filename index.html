@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intelligent Data Profiler | ES6</title>
+    <title>Intelligent Data Studio | AI-Augmented</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
@@ -13,24 +13,24 @@
     <div class="container">
         <header>
             <div class="logo-area">
-                <h1>📊 Data Profiler <span class="badge">PRO</span></h1>
-                <p class="subtitle">High-speed client-side exploratory analysis</p>
+                <h1>📊 Data Studio <span class="badge">ADVANCED</span></h1>
+                <p class="subtitle">AI-Augmented Preprocessing & Profiling</p>
             </div>
             <button id="theme-toggle" class="theme-btn">🌙 Dark Mode</button>
         </header>
 
         <div id="welcome-screen" class="features-grid">
             <div class="f-card">
-                <h3>⚡ Fast</h3>
-                <p>Client-side parsing with zero server latency.</p>
+                <h3>🛠️ Preprocess</h3>
+                <p>Clean null values and duplicates instantly in-browser.</p>
             </div>
             <div class="f-card">
-                <h3>🛡️ Private</h3>
-                <p>Your data never leaves your local machine.</p>
+                <h3>🔍 Detect</h3>
+                <p>Automated Z-Score outlier and anomaly detection.</p>
             </div>
             <div class="f-card">
-                <h3>📈 Visual</h3>
-                <p>Instant trend mapping for numerical columns.</p>
+                <h3>🛡️ Privacy</h3>
+                <p>100% local processing. No data ever hits the cloud.</p>
             </div>
         </div>
 
@@ -42,30 +42,52 @@
         </div>
         
         <div id="results" class="hidden">
-            <div class="stats-grid">
-                <div class="card">
-                    <h4>Total Records</h4>
-                    <h2 id="stat-row-count">0</h2>
-                    <p class="card-label">Identified entries</p>
-                </div>
-                <div class="card">
-                    <h4>Calculated Mean</h4>
-                    <h2 id="stat-mean">0</h2>
-                    <p class="card-label">Primary numeric feature</p>
-                </div>
-            </div>
-            
-            <div class="chart-container">
-                <div class="chart-header">
-                    <h3>Data Trend Visualization</h3>
-                </div>
-                <canvas id="dataChart"></canvas>
+            <div class="studio-layout">
+                
+                <aside class="controls-card">
+                    <h4>🛠️ Operations</h4>
+                    <div class="control-group">
+                        <label>Select Feature:</label>
+                        <select id="column-select" class="styled-select"></select>
+                    </div>
+                    <button id="btn-clean" class="btn-secondary">🧹 Remove Nulls</button>
+                    <button id="btn-dedupe" class="btn-secondary">👯 Remove Duplicates</button>
+                    <hr class="divider">
+                    <button id="btn-download" class="btn-ghost">💾 Export Cleaned CSV</button>
+                </aside>
+
+                <main class="main-stats">
+                    <div class="stats-grid">
+                        <div class="card">
+                            <h4>Data Health</h4>
+                            <h2 id="stat-health">--</h2>
+                            <p class="card-label">Quality Score</p>
+                        </div>
+                        <div class="card">
+                            <h4>Anomalies</h4>
+                            <h2 id="stat-anomalies" class="danger-text">0</h2>
+                            <p class="card-label">Outliers Detected (Z > 2)</p>
+                        </div>
+                        <div class="card">
+                            <h4>Total Rows</h4>
+                            <h2 id="stat-row-count">0</h2>
+                            <p class="card-label">Active Records</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <h3>Feature Distribution & Trends</h3>
+                        </div>
+                        <canvas id="dataChart"></canvas>
+                    </div>
+                </main>
             </div>
 
             <div class="footer-actions">
                 <div class="python-callout">
-                    <h4>Need deeper statistical insights?</h4>
-                    <p>Use the specialized Python engine for heatmaps and correlation matrices.</p>
+                    <h4>Advanced Analytics Handshake</h4>
+                    <p>Processed your data? Use our Python engine for Pearson correlations and heatmaps.</p>
                     <a href="https://data-profilerpython-jzexmafhrvueyhbacwvifg.streamlit.app/" class="btn-primary" target="_blank" rel="noopener noreferrer">Launch Python Engine →</a>
                 </div>
             </div>
@@ -74,5 +96,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
-
