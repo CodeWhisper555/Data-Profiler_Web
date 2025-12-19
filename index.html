@@ -26,7 +26,7 @@
             overflow: hidden;
         }
 
-        /* Sidebar Architecture */
+        /* SIDEBAR ARCHITECTURE */
         .sidebar {
             width: 320px;
             background-color: var(--bg-secondary);
@@ -62,7 +62,7 @@
             background: rgba(88, 166, 255, 0.05);
         }
 
-        /* Main Stage */
+        /* MAIN STAGE */
         .main-stage {
             flex-grow: 1;
             padding: 40px;
@@ -79,7 +79,7 @@
 
         h1 { font-size: 20px; font-weight: 400; margin: 0; letter-spacing: 1px; }
 
-        /* Stats Grid */
+        /* STATS GRID */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -108,7 +108,7 @@
             margin-bottom: 5px;
         }
 
-        /* Industrial Buttons */
+        /* INDUSTRIAL BUTTONS */
         .btn {
             background: #21262D;
             border: 1px solid var(--border-color);
@@ -128,7 +128,7 @@
         .btn-primary { background: var(--accent-blue); color: #0A0C10; border: none; }
         .btn-primary:hover { background: #79c0ff; }
 
-        /* Visualization */
+        /* VISUALIZATION */
         #chartWrapper {
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
@@ -154,12 +154,36 @@
         }
 
         td { padding: 10px; border-bottom: 1px solid #21262d; color: var(--text-main); }
+
+        /* CUSTOM TOAST NOTIFICATION */
+        #toast {
+            position: fixed;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-secondary);
+            border: 1px solid var(--accent-blue);
+            color: var(--accent-blue);
+            padding: 15px 30px;
+            border-radius: 4px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 1px;
+            z-index: 9999;
+            transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-transform: uppercase;
+        }
+
+        #toast.active { top: 25px; }
     </style>
 </head>
 <body>
 
+    <div id="toast">SYSTEM_LOG: STATUS_OK</div>
+
     <div class="sidebar">
-        <div class="brand">INGESTION_NODE_v4.1.1</div>
+        <div class="brand">INGESTION_NODE_v4.2.0</div>
         
         <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
             <div class="stat-label">SOURCE_FILE</div>
@@ -207,6 +231,14 @@
         let rawData = [];
         let headers = [];
 
+        // TOAST ENGINE
+        function triggerToast(message) {
+            const toast = document.getElementById('toast');
+            toast.innerText = `SYSTEM_LOG: ${message}`;
+            toast.classList.add('active');
+            setTimeout(() => { toast.classList.remove('active'); }, 3500);
+        }
+
         document.getElementById('fileInput').addEventListener('change', function(e) {
             const startTime = performance.now();
             const file = e.target.files[0];
@@ -225,6 +257,7 @@
 
                 updateUI(startTime);
                 renderChart();
+                triggerToast("STREAM_INGESTED_SUCCESSFULLY");
             };
             reader.readAsText(file);
         });
@@ -275,17 +308,28 @@
                         pointRadius: 0
                     }]
                 },
-                options: { plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { grid: { color: '#30363D' }, ticks: { color: '#8B949E' } } } }
+                options: { 
+                    plugins: { legend: { display: false } }, 
+                    scales: { 
+                        x: { display: false }, 
+                        y: { grid: { color: '#30363D' }, ticks: { color: '#8B949E' } } 
+                    } 
+                }
             });
         }
 
         function cleanData() {
+            const initialCount = rawData.length;
+            
             // Intelligent Clean: Only remove rows that are MOSTLY empty (80% or more)
             rawData = rawData.filter(row => {
                 const emptyCells = row.filter(c => !c || c === "NA" || c === ".").length;
                 return emptyCells < (headers.length * 0.8);
             });
-            alert("Sanitization Applied: Heavy Noise Removed. Preserving Labels.");
+
+            const removed = initialCount - rawData.length;
+            
+            triggerToast(`${removed} NOISY_RECORDS_PURGED | LABELS_PRESERVED`);
             updateUI(performance.now());
         }
 
@@ -298,6 +342,7 @@
             a.href = url;
             a.download = 'high_integrity_stream.csv';
             a.click();
+            triggerToast("STREAM_EXPORT_COMMENCED");
         }
     </script>
 </body>
