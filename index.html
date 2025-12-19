@@ -9,8 +9,8 @@
     <style>
         :root {
             --bg-primary: #0A0C10;
-            --bg-secondary: #161B22; /* Matched to Streamlit Sidebar */
-            --accent-blue: #58A6FF;   /* Matched to Streamlit Accent */
+            --bg-secondary: #161B22; 
+            --accent-blue: #58A6FF;   
             --border-color: #30363D;
             --text-main: #E6E6E6;
             --text-muted: #8B949E;
@@ -173,6 +173,7 @@
             transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             text-transform: uppercase;
+            pointer-events: none; /* Prevents toast from blocking clicks */
         }
 
         #toast.active { top: 25px; }
@@ -183,7 +184,7 @@
     <div id="toast">SYSTEM_LOG: STATUS_OK</div>
 
     <div class="sidebar">
-        <div class="brand">INGESTION_NODE_v4.2.0</div>
+        <div class="brand">INGESTION_NODE_v4.2.1</div>
         
         <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
             <div class="stat-label">SOURCE_FILE</div>
@@ -231,11 +232,12 @@
         let rawData = [];
         let headers = [];
 
-        // TOAST ENGINE
+        // TOAST ENGINE - REPLACES BROWSER ALERTS
         function triggerToast(message) {
             const toast = document.getElementById('toast');
             toast.innerText = `SYSTEM_LOG: ${message}`;
             toast.classList.add('active');
+            // Remains visible for 3.5 seconds
             setTimeout(() => { toast.classList.remove('active'); }, 3500);
         }
 
@@ -321,7 +323,7 @@
         function cleanData() {
             const initialCount = rawData.length;
             
-            // Intelligent Clean: Only remove rows that are MOSTLY empty (80% or more)
+            // Filter logic
             rawData = rawData.filter(row => {
                 const emptyCells = row.filter(c => !c || c === "NA" || c === ".").length;
                 return emptyCells < (headers.length * 0.8);
@@ -329,7 +331,9 @@
 
             const removed = initialCount - rawData.length;
             
+            // ALERT REMOVED - REPLACED WITH TOAST
             triggerToast(`${removed} NOISY_RECORDS_PURGED | LABELS_PRESERVED`);
+            
             updateUI(performance.now());
         }
 
@@ -342,6 +346,7 @@
             a.href = url;
             a.download = 'high_integrity_stream.csv';
             a.click();
+            
             triggerToast("STREAM_EXPORT_COMMENCED");
         }
     </script>
