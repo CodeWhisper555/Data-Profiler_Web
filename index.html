@@ -256,10 +256,28 @@
 
             reader.onload = function(event) {
                 const text = event.target.result;
-                const rows = text.split('\n').map(row => row.split(','));
-                headers = rows[0].map(h => h.trim());
-                // Filter out empty rows
-                rawData = rows.slice(1).filter(r => r.length === headers.length && r.some(cell => cell.trim() !== ""));
+                
+                // MCN-Grade Fix: Split rows while handling different OS line endings
+                const rows = text.split(/\r?\n/);
+                
+                // Robust Regex: Only split by commas NOT enclosed in double quotes
+                const csvRegex = /,(?=(?:(?:[^"]*"){2})*[^"]*$)/;
+
+                // Process Headers: Split and remove extra quotes
+                headers = rows[0].split(csvRegex).map(h => h.replace(/"/g, '').trim());
+                
+                rawData = [];
+                for(let i = 1; i < rows.length; i++) {
+                    if (!rows[i].trim()) continue; // Skip empty lines
+                    
+                    // Process Row: Split and remove quotes from each cell
+                    const cols = rows[i].split(csvRegex).map(c => c.replace(/"/g, '').trim());
+                    
+                    // Integrity Check: Only accept rows matching header count
+                    if(cols.length === headers.length) {
+                        rawData.push(cols);
+                    }
+                }
 
                 updateUI(startTime);
                 renderChart();
@@ -274,21 +292,22 @@
             // 1. Calculations
             const totalCells = rawData.length * headers.length;
             const nulls = rawData.flat().filter(cell => !cell || cell.trim() === "" || cell === "NA").length;
+            
             const numericFeatures = headers.filter((_, index) => {
-                const sample = rawData.find(r => r[index] !== "")?.[index];
-                return !isNaN(parseFloat(sample)) && isFinite(sample);
+                const sampleRow = rawData.find(r => r[index] !== "");
+                const sample = sampleRow ? sampleRow[index] : null;
+                return sample !== null && !isNaN(parseFloat(sample)) && isFinite(sample);
             }).length;
 
             // 2. Metric Updates
             document.getElementById('rowCount').innerText = rawData.length.toLocaleString();
             document.getElementById('nullCount').innerText = nulls.toLocaleString();
             
-            const integrity = Math.max(0, 100 - (nulls / totalCells * 100)).toFixed(2);
+            const integrity = totalCells > 0 ? Math.max(0, 100 - (nulls / totalCells * 100)).toFixed(2) : "0";
             document.getElementById('integrityScore').innerText = integrity + '%';
 
             // 3. Status Updates
-            const endTime = performance.now();
-            const latency = Math.round(endTime - startTime);
+            const latency = Math.round(performance.now() - startTime);
             document.getElementById('loadTime').innerText = latency + 'ms';
 
             document.getElementById('status').innerHTML = 
@@ -305,7 +324,6 @@
 
         function renderTable() {
             let html = `<table><thead><tr>${headers.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>`;
-            // Corporate-tier Sampling (Top 10 records)
             rawData.slice(0, 10).forEach(row => {
                 html += `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`;
             });
@@ -317,8 +335,9 @@
 
         function renderChart() {
             const ctx = document.getElementById('distributionChart').getContext('2d');
-            // Dynamically find first numeric column for preview
             const firstNumIdx = headers.findIndex((_, i) => !isNaN(parseFloat(rawData[0][i])));
+            if (firstNumIdx === -1) return;
+
             const numericData = rawData.map(r => parseFloat(r[firstNumIdx])).filter(v => !isNaN(v));
             
             if (window.myChart) window.myChart.destroy();
@@ -351,13 +370,15 @@
 
         function cleanData() {
             const start = performance.now();
-            // Drop rows containing null vectors
             rawData = rawData.filter(row => !row.some(cell => !cell || cell.trim() === "" || cell === "NA"));
             updateUI(start);
         }
 
         function downloadCSV() {
-            const csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n" + rawData.map(e => e.join(",")).join("\n");
+            // Re-wrapping values in quotes for safe CSV export
+            const csvContent = "data:text/csv;charset=utf-8," + 
+                headers.map(h => `"${h}"`).join(",") + "\n" + 
+                rawData.map(row => row.map(cell => `"${cell}"`).join(",")).join("\n");
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
